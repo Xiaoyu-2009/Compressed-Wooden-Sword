@@ -6,7 +6,11 @@ import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.EquipmentSlotGroup;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.item.*;
+import net.minecraft.world.item.component.ItemAttributeModifiers;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -20,7 +24,7 @@ public class CompressedWoodenSword implements ModInitializer {
 	public static final List<Item> COMPRESSED_STICKS = new ArrayList<>();
 
 	static final String[] SIZES = {
-		"single", "double", "triple", "quadruple", "quintuple", "hextuple", "septuple", "octuple"
+		"single", "double", "triple", "quadruple", "quintuple", "hextuple", "septuple", "octuple", "nonuple"
 	};
 
 	@Override
@@ -33,9 +37,14 @@ public class CompressedWoodenSword implements ModInitializer {
 
 		Item stickSword = new SwordItem(
 			StickTier.INSTANCE,
-			new Item.Properties().attributes(SwordItem.createAttributes(StickTier.INSTANCE, 3, -2.4f))
+			new Item.Properties().attributes(
+				ItemAttributeModifiers.builder()
+					.add(Attributes.ATTACK_DAMAGE, new AttributeModifier(Item.BASE_ATTACK_DAMAGE_ID, 99999998, AttributeModifier.Operation.ADD_VALUE), EquipmentSlotGroup.MAINHAND)
+					.add(Attributes.ATTACK_SPEED, new AttributeModifier(Item.BASE_ATTACK_SPEED_ID, -2.4, AttributeModifier.Operation.ADD_VALUE), EquipmentSlotGroup.MAINHAND)
+					.build()
+			)
 		);
-		Registry.register(BuiltInRegistries.ITEM, ResourceLocation.fromNamespaceAndPath(MOD_ID, "super_stick_sword"), stickSword);
+		Registry.register(BuiltInRegistries.ITEM, ResourceLocation.fromNamespaceAndPath(MOD_ID, "compressed_wooden_sword"), stickSword);
 		COMPRESSED_STICKS.add(stickSword);
 
 		CreativeModeTab tab = FabricItemGroup.builder()
